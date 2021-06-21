@@ -6,6 +6,10 @@ import aiohttp as aiohttp
 import re
 
 
+class NotAuthenticatedError(Exception):
+    pass
+
+
 class Session:
     sess: aiohttp.ClientSession
     name: str
@@ -47,7 +51,8 @@ class Session:
         async with self.sess.post(post_url, data=data) as resp:
             soup = BeautifulSoup(await resp.text(), features="html.parser")
 
-            # TODO: Check if we are logged in
+            if resp.status == 401:
+                raise NotAuthenticatedError()
 
             self.name = soup.select_one('td:nth-child(2) > b.casmenu').text
             for script in soup.find_all('script'):
