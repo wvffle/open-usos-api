@@ -18,6 +18,7 @@ class Session:
 
     def __init__(self, usosweb_url, sess: Optional[aiohttp.ClientSession] = None):
         self.sess = aiohttp.ClientSession() if sess is None else sess
+        self.sess.headers.add('User-Agent', 'Mozilla/4.0 (compatible; MSIE 6.0; Linux 2.6.26-1-amd64) Lobo/0.98.3')
 
         url_parts = urlparse(usosweb_url)
         self.usosweb_url = url_parts.scheme + '://' + url_parts.hostname
